@@ -1,28 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="app">
+    <ToolBar style="margin-top:-60px"></ToolBar>
+
+    <v-content transition="slide-x-transition">
+      <router-view></router-view>
+    </v-content>
+
+    <Footer/>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    export default {
+        name: 'app',
+        components: {
+            ToolBar: () => import('./components/ToolBar.vue'),
+            // Carousels : () => import('./components/home_view/Carousels.vue'),
+            //  Home:()=>import('@/components/Home.vue'),
+            Footer:()=>import('./components/Footer.vue'),
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+        }
+    }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
+
 </style>
