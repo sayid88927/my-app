@@ -12,6 +12,7 @@
                                  open-delay="100">
 
                             <v-card
+                                    @click="jump(n)"
                                     outlined
                                     :elevation="hover ? 16 : 2"
                                     class="mx-1 mb-2">
@@ -41,9 +42,17 @@
 
             }
         },
+        methods: {
+            jump(id){
+                console.log(id)
+               this.$router.push({
+                   path: "/detailspage/" + id
+               })
+            }
+        },
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

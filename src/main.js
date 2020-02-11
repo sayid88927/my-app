@@ -3,7 +3,6 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import router from './router';
-Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
 
 

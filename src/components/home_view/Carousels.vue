@@ -34,10 +34,10 @@
         },
         methods: {
             fetchData: async function () {
-                const res = await http.get(api.carousels)
-                if(res.data.code===0){
-                    this.items=res.data.data;
-                }
+                // const res = await http.get(api.carousels)
+                // if(res.data.code===0){
+                //     this.items=res.data.data;
+                // }
             }
         }
     }

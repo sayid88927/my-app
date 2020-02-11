@@ -94,8 +94,9 @@
         methods: {
             fetchData: async function () {
                 const res = await http.get(api.boolbar)
-                if(res.data.code===0){
-                    this.items=res.data.data;
+              //  console.log(res)
+                if(res.code===0){
+                    this.items=res.data;
                 }
             }
         }

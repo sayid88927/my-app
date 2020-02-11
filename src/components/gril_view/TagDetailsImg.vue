@@ -1,8 +1,30 @@
 <template>
     <v-container>
-        <v-card style="margin-top: 5px">
-            <v-btn class="title ml-3 mt-2" color="primary" dark>最新图片</v-btn>
-            <v-divider class="mt-2 "></v-divider>
+        <v-card style="margin-top: 35px">
+
+            <v-card>
+
+                <v-tabs
+                        show-arrows
+                        background-color="blue darken-2"
+                        fixed-tabs
+                        :value="value"
+                        center-active
+                        dark>
+
+                    <v-tab
+                            v-for="(item, index) in items"
+                            :key="index"
+
+                            @click="onChangePage(item.id)"
+                            class="title text-truncate">
+                        {{ item.tag}}
+                    </v-tab>
+
+                </v-tabs>
+
+            </v-card>
+
             <v-container>
                 <v-layout row>
                     <template v-for="(item, n) in grilImgs">
@@ -20,7 +42,8 @@
                                             :src="item.imgurl"
                                             aspect-ratio="1">
                                     </v-img>
-                                    <div @click="JumpDetails(item.id,item.title)" class="pl-2 title  text-truncate" v-text="item.title"></div>
+                                    <div @click="JumpDetails(item.id,item.title)" class="pl-2 title  text-truncate"
+                                         v-text="item.title"></div>
 
                                     <v-divider></v-divider>
 
@@ -30,23 +53,17 @@
                                             <v-col
                                                     :key="n"
                                                     v-if="n<item.tagsVo.length">
-
-
-                                                    <v-btn dark  small color="primary caption  text-truncate ma-1"
-                                                           style="max-width: 80px;"
-                                                           @click="JumpTagDetails(item.tagsVo[n].tagid)"
-                                                           v-text="item.tagsVo[n].tag">
-                                                    </v-btn>
-
+                                                <v-btn dark small color="primary caption  text-truncate ma-1"
+                                                       style="max-width: 80px;"
+                                                       @click="onChangePage(item.tagsVo[n].tagid)"
+                                                       v-text="item.tagsVo[n].tag">
+                                                </v-btn>
                                             </v-col>
 
                                             <template v-else></template>
                                         </template>
-
                                     </v-row>
-
                                 </v-card>
-
                             </v-hover>
                         </v-flex>
                     </template>
@@ -58,7 +75,6 @@
                         circle
                         v-model="page"
                         :length="15"
-                        :click="onChangePage()"
                         :total-visible="7"
                 ></v-pagination>
             </div>
@@ -66,46 +82,65 @@
     </v-container>
 </template>
 
+
 <script>
+
     import http from '@/providers/http'
     import api from '@/providers/api'
 
     export default {
-        name: "ImgList",
-
+        name: "DetailsImg",
         data() {
             return {
-                tag:'' ,
-                tagsVo:{ //创建空对象
-                    tag:null,
-                    tagid:null,
+                id: null,
+                tagsVo: { //创建空对象
+                    tag: null,
+                    tagid: null,
                 },
+                value: null,
                 page: 1,
                 tab: 0,
                 pstion: 0,
                 grilImgs: {},
                 tgs: {},
                 datas: {},
+                items: [],
             }
         },
-
         mounted: function () {
+            this.getRouterData(),
             this.fetchData()
-        },
-
-        await: function () {
-
+             this.selectTag()
         },
         methods: {
-            onChangePage: function () {
-                //  console.log(this.page)
+            getRouterData: function () {
+                this.id = this.$route.query.id
+                //console.log(this.id)
             },
-
             fetchData: async function () {
-                const res = await  http.get(api.grilImgs)
-                //console.log(res)
-                //this.datas=res.data
+                const res = await http.get(api.grilImgsTagId, {Id: this.id})
                 this.grilImgs = res.data;
+            },
+            async selectTag() {
+                const res = await http.get(api.selectTag)
+                this.items = res.data;
+                // var id = parseInt(this.id)
+                this.items.map((item, index) => {
+                    // console.log(typeof (this.id));
+                    if (item.id === parseInt(this.id)) {
+                        this.value = index
+                    }
+                })
+            },
+            async onChangePage(id) {
+                const res = await http.get(api.grilImgsTagId, {Id: id})
+                this.grilImgs = res.data;
+                // console.log(typeof (id));
+                this.items.map((item, index) => {
+                    if (item.id=== parseInt(id)) {
+                        this.value = index
+                    }
+                })
             },
             JumpDetails: function (id,title) {
                 this.$router.push({
@@ -113,24 +148,10 @@
                     query: {id: id,title:title}
                 })
             },
-            // async JumpTagDetails(id) {
-            //
-            //     const res = await http.get(api.grilImgsTagId, {Id:id})
-            //     this.grilImgs = res.data;
-            //     console.log(res.data)
-            // },
-
-             JumpTagDetails: function (id) {
-                this.$router.push({
-                    path: '/tagdetailspage',
-                    query: {id: id}
-                })
-           }
         },
-
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>
