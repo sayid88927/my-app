@@ -26,42 +26,36 @@
 
                                     <v-row no-gutters dense>
                                         <template v-for="n in 6">
-
                                             <v-col
                                                     :key="n"
                                                     v-if="n<item.tagsVo.length">
-
-
                                                     <v-btn dark  small color="primary caption  text-truncate ma-1"
                                                            style="max-width: 80px;"
                                                            @click="JumpTagDetails(item.tagsVo[n].tagid)"
                                                            v-text="item.tagsVo[n].tag">
                                                     </v-btn>
-
                                             </v-col>
-
                                             <template v-else></template>
                                         </template>
-
                                     </v-row>
-
                                 </v-card>
-
                             </v-hover>
                         </v-flex>
                     </template>
                 </v-layout>
+
+                    <div style="margin-bottom: 50px">
+                        <vue-pager
+                                :cur="cur"
+                                :all="all"
+                                v-on:pageClick="listen"
+                                >
+                        </vue-pager>
+
+                    </div>
+
             </v-container>
 
-            <div class="text-center">
-                <v-pagination
-                        circle
-                        v-model="page"
-                        :length="15"
-                        :click="onChangePage()"
-                        :total-visible="7"
-                ></v-pagination>
-            </div>
         </v-card>
     </v-container>
 </template>
@@ -69,10 +63,9 @@
 <script>
     import http from '@/providers/http'
     import api from '@/providers/api'
-
+    import vuePager from '@/js/page-break'
     export default {
         name: "ImgList",
-
         data() {
             return {
                 tag:'' ,
@@ -80,32 +73,31 @@
                     tag:null,
                     tagid:null,
                 },
-                page: 1,
                 tab: 0,
                 pstion: 0,
                 grilImgs: {},
                 tgs: {},
-                datas: {},
+                overlay: null,
+
+                cur: 1,
+                all: 500
             }
         },
 
         mounted: function () {
-            this.fetchData()
-        },
-
-        await: function () {
-
+            this.fetchData(this.page)
         },
         methods: {
-            onChangePage: function () {
-                //  console.log(this.page)
-            },
 
-            fetchData: async function () {
-                const res = await  http.get(api.grilImgs)
-                //console.log(res)
-                //this.datas=res.data
-                this.grilImgs = res.data;
+            fetchData: async function (pageNum) {
+                const res = await  http.get(api.getGrilimgsVoByCondition,
+                    {pageNum: pageNum, pageSize: 5}
+                )
+                console.log(res)
+               this.all = res.data.pages
+                this.grilImgs = res.data.list
+             //   console.log(this.grilImgs)
+             //   this.pages = res.data.total
             },
             JumpDetails: function (id,title) {
                 this.$router.push({
@@ -113,24 +105,22 @@
                     query: {id: id,title:title}
                 })
             },
-            // async JumpTagDetails(id) {
-            //
-            //     const res = await http.get(api.grilImgsTagId, {Id:id})
-            //     this.grilImgs = res.data;
-            //     console.log(res.data)
-            // },
-
              JumpTagDetails: function (id) {
                 this.$router.push({
                     path: '/tagdetailspage',
                     query: {id: id}
                 })
-           }
+           },
+            listen:function(page){
+                this.fetchData(page)
+            },
         },
-
+        components:{
+            'vue-pager': vuePager,  //子组件
+        },
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

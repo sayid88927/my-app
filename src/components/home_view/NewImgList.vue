@@ -31,10 +31,23 @@
                 </v-layout>
             </v-container>
         </v-card>
+
+
+
+
     </v-container>
+
+
+
+
+
 </template>
 
 <script>
+
+
+
+
     export default {
         name: "ImgList",
         data() {
@@ -48,8 +61,11 @@
                this.$router.push({
                    path: "/detailspage/" + id
                })
-            }
+            },
+
+
         },
+
     }
 </script>
 
