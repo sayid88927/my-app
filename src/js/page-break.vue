@@ -30,12 +30,12 @@
 <script>
     export default {
         name: "page-break",
-        props:['cur','all'],  //接收父组件的数据对象数据
+        props:['tem_cur','all'],  //接收父组件的数据对象数据
         data() {
             return {
+                cur:this.tem_cur,
             }
         },
-
         watch: {
             cur: function(newValue, oldValue){
               //  console.log(arguments);
@@ -47,10 +47,10 @@
                     this.cur=num;
                 }
             },
-            pageClick(){
-           //     console.log('现在是'+this.cur+'页')
-                this.$emit('pageClick',this.cur);
-            },
+           pageClick(){
+             //  console.log('现在是'+this.cur+'页')
+               this.$emit('pageClick',this.cur);
+           },
             pageSkip(){
                 var maxPage = this.all;
                 var skipPage = Number(document.getElementsByClassName("jumppage")[0].value);

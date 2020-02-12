@@ -46,9 +46,9 @@
 
                     <div style="margin-bottom: 50px">
                         <vue-pager
-                                :cur="cur"
+                                :tem_cur="tem_cur"
                                 :all="all"
-                                v-on:pageClick="listen"
+                                v-on:pageClick="pageClick"
                                 >
                         </vue-pager>
 
@@ -73,14 +73,11 @@
                     tag:null,
                     tagid:null,
                 },
-                tab: 0,
-                pstion: 0,
                 grilImgs: {},
                 tgs: {},
                 overlay: null,
-
-                cur: 1,
-                all: 500
+                tem_cur: 1,
+                all: null,
             }
         },
 
@@ -96,8 +93,6 @@
                 console.log(res)
                this.all = res.data.pages
                 this.grilImgs = res.data.list
-             //   console.log(this.grilImgs)
-             //   this.pages = res.data.total
             },
             JumpDetails: function (id,title) {
                 this.$router.push({
@@ -111,7 +106,7 @@
                     query: {id: id}
                 })
            },
-            listen:function(page){
+            pageClick:function(page){
                 this.fetchData(page)
             },
         },
