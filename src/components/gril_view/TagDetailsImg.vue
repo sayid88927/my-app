@@ -68,16 +68,19 @@
                         </v-flex>
                     </template>
                 </v-layout>
+
+                <div style="margin-bottom: 130px; margin-top: 50px">
+                    <vue-pager
+                            :tem_cur="tem_cur"
+                            :all="all"
+                            v-on:pageClick="listen">
+                    </vue-pager>
+                </div>
+
             </v-container>
 
-            <div class="text-center">
-                <v-pagination
-                        circle
-                        v-model="page"
-                        :length="15"
-                        :total-visible="7"
-                ></v-pagination>
-            </div>
+
+
         </v-card>
     </v-container>
 </template>
@@ -87,7 +90,7 @@
 
     import http from '@/providers/http'
     import api from '@/providers/api'
-
+    import vuePager from '@/js/page-break'
     export default {
         name: "DetailsImg",
         data() {
@@ -98,18 +101,16 @@
                     tagid: null,
                 },
                 value: null,
-                page: 1,
                 tab: 0,
-                pstion: 0,
                 grilImgs: {},
-                tgs: {},
-                datas: {},
                 items: [],
+                tem_cur: 1,
+                all: null,
             }
         },
         mounted: function () {
             this.getRouterData(),
-            this.fetchData()
+            this.fetchData(this.id,this.tem_cur)
              this.selectTag()
         },
         methods: {
@@ -117,9 +118,17 @@
                 this.id = this.$route.query.id
                 //console.log(this.id)
             },
-            fetchData: async function () {
-                const res = await http.get(api.grilImgsTagId, {Id: this.id})
-                this.grilImgs = res.data;
+            fetchData: async function (id,pageNum) {
+                const res = await http.get(api.grilImgsTagId,
+                    {
+                        Id: id,
+                        pageNum: pageNum,
+                        pageSize: 5
+                    }
+                    )
+                console.log(res)
+                this.all = res.data.pages
+                this.grilImgs = res.data.list
             },
             async selectTag() {
                 const res = await http.get(api.selectTag)
@@ -133,9 +142,11 @@
                 })
             },
             async onChangePage(id) {
-                const res = await http.get(api.grilImgsTagId, {Id: id})
-                this.grilImgs = res.data;
+              //  const res = await http.get(api.grilImgsTagId, {Id: id})
+             //   this.grilImgs = res.data;
                 // console.log(typeof (id));
+
+                this.fetchData(id,this.tem_cur)
                 this.items.map((item, index) => {
                     if (item.id=== parseInt(id)) {
                         this.value = index
@@ -148,6 +159,16 @@
                     query: {id: id,title:title}
                 })
             },
+
+            listen:function(page){
+                this.fetchData(page)
+            },
+
+
+        },
+
+        components:{
+            'vue-pager': vuePager,  //子组件
         },
     }
 </script>

@@ -4,9 +4,48 @@
             <v-card>
                 <p style="height: 50px;line-height: 70px;"
                    class="font-weight-medium title text-center">{{this.title}}</p>
+
+                <span  style="font-size: 12px; color:#666"   class="ma-4">
+                    {{this.detailupdatetime}}
+                </span>
+
+                <span  style="font-size: 12px; color:#bf382b">
+                     共 {{this.num}} 张
+                </span>
+
+                <span  style="font-size: 12px; color:#bf382b" class="ma-2">
+                     第 {{this.page}} 张
+                </span>
+
                 <v-img
                         class="ma-4"
                         :src="imgurl"></v-img>
+
+                <div>0
+                    <p class="text-justify ma-4 subtitle-1">
+                        {{this.detail}}
+                    </p>
+                </div>
+
+                <v-row
+                        class="ma-4"
+                        no-gutters>
+                    <v-col
+                            md="auto"
+                            v-for="(item,i) in tagsVo"
+                            :key="i"
+                    >
+                        <v-btn
+                                color="error"
+                                title light
+                                class="ma-1 text-center font-weight-black	"
+                                small
+                                @click="JumpTagDetails(item.tagid)"
+                        >{{item.tag}}</v-btn>
+
+                    </v-col>
+                </v-row>
+                
                 <div class="text-center">
                     <v-pagination
                             circle
@@ -34,30 +73,50 @@
                 title: '',
                 imgurl: '',
                 length: null,
-                data:null,
+                data: null,
+                detail: null,
+                detailupdatetime:null,
+                num:null,
+                tagsVo: {
+                    tag: null,
+                    tagid: null,
+                }
             }
         },
         mounted: function () {
             this.getRouterData()
             this.fetchData()
+            this.selectByGrilimgsId()
         },
         methods: {
             getRouterData: function () {
                 this.id = this.$route.query.id
-                this.title = this.$route.query.title
-                //console.log(  this.id)
+                //    this.title = this.$route.query.title
             },
+            async selectByGrilimgsId() {
+                const res = await http.get(api.selectByGrilimgsId, {Id: this.id})
+                console.log(res)
+                this.title = res.data.title
+                this.detail = res.data.detail
+                this.tagsVo = res.data.tagsVo
+                this.detailupdatetime = res.data.detailupdatetime
+                this.num = res.data.num
+            },
+
             async fetchData() {
                 const res = await http.get(api.grilImgsId, {Id: this.id})
                 this.data = res.data
-              //console.log(this.page)
-                this.imgurl = this.data[this.page-1].imgUrl
-              //console.log(this.imgurl)
+                this.imgurl = this.data[this.page - 1].imgUrl
                 this.length = this.data.length
             },
             onChangePage: function () {
-             //console.log(this.page)
-                this.imgurl = this.data[this.page-1].imgUrl
+                this.imgurl = this.data[this.page - 1].imgUrl
+            },
+            JumpTagDetails: function (id) {
+                this.$router.push({
+                    path: '/tagdetailspage',
+                    query: {id: id}
+                })
             },
         },
     }

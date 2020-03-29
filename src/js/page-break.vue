@@ -98,14 +98,21 @@
 <style >
 
     *{margin: 0;padding: 0;}
-    #page-break{margin: auto;
+    #page-break{
+        margin: auto;
         width: 50%;
-        padding: 10px;}
+
+    }
     #page-break li{list-style: none;}
-    #page-break a{border: 1px solid #ddd; text-decoration: none;float: left;padding: 6px 12px;color: #337ab7;cursor: pointer}
+    #page-break a{border: 1px solid #ddd;
+        margin :2px;
+        text-decoration: none;float: left;padding: 6px 12px;
+        color: #337ab7;cursor: pointer;font-family: Verdana, 微软雅黑, Helvetica, sans-serif;
+        font-weight: bold;border-radius: 3px;}
     #page-break a:hover{background-color: #eee;}
     #page-break a .banclick{cursor: not-allowed;}
-    #page-break .active a{color: #fff;cursor: default;background-color: #337ab7;border-color: #337ab7;}
+    #page-break .active a{color: #fff;cursor: default;
+        background-color: #337ab7;border-color: #337ab7;}
     #page-break i{font-style: normal;color: #d44950;margin: 0px 4px;font-size: 12px;}
     #page-break .jumpbox .jumppage {border: 1px solid #ddd; margin-left: 40px; height: 33px; width: 40px; float: left;}
     #page-break .jumpbox .jumpbtn {cursor: pointer; margin-left: 10px;}

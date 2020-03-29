@@ -6,4 +6,5 @@ export default {
     grilImgsTagId: '/gril/selectTagId', //carousels
     selectTag: '/gril/selectTag', //carousels
     getGrilimgsVoByCondition: '/gril/getGrilimgsVoByCondition', //carousels
+    selectByGrilimgsId: '/gril/selectByGrilimgsId',
 }

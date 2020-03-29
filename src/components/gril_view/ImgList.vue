@@ -16,11 +16,11 @@
                                         :elevation="hover ? 16 : 2"
                                         class="mx-1 mb-2">
                                     <v-img
-                                            @click="JumpDetails(item.id,item.title)"
+                                            @click="JumpDetails(item.id)"
                                             :src="item.imgurl"
                                             aspect-ratio="1">
                                     </v-img>
-                                    <div @click="JumpDetails(item.id,item.title)" class="pl-2 title  text-truncate" v-text="item.title"></div>
+                                    <div @click="JumpDetails(item.id)" class="pl-2 title  text-truncate" v-text="item.title"></div>
 
                                     <v-divider></v-divider>
 
@@ -44,11 +44,11 @@
                     </template>
                 </v-layout>
 
-                    <div style="margin-bottom: 50px">
+                    <div style="margin-bottom: 130px; margin-top: 50px">
                         <vue-pager
                                 :tem_cur="tem_cur"
                                 :all="all"
-                                v-on:pageClick="pageClick"
+                                v-on:pageClick="listen"
                                 >
                         </vue-pager>
 
@@ -82,7 +82,7 @@
         },
 
         mounted: function () {
-            this.fetchData(this.page)
+            this.fetchData(this.tem_cur)
         },
         methods: {
 
@@ -94,10 +94,10 @@
                this.all = res.data.pages
                 this.grilImgs = res.data.list
             },
-            JumpDetails: function (id,title) {
+            JumpDetails: function (id) {
                 this.$router.push({
                     path: '/details',
-                    query: {id: id,title:title}
+                    query: {id: id}
                 })
             },
              JumpTagDetails: function (id) {
@@ -106,7 +106,7 @@
                     query: {id: id}
                 })
            },
-            pageClick:function(page){
+            listen:function(page){
                 this.fetchData(page)
             },
         },
